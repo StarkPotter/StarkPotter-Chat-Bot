@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOT_StarkPotter | Crystal PvP Chatbot</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px #00b4d8;
+    }
+
+    .chat-container {
+      width: 90%;
+      max-width: 600px;
+      background: rgba(20, 20, 25, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      overflow-y: auto;
+      height: 70vh;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px 14px;
+      border-radius: 15px;
+      max-width: 80%;
+      line-height: 1.4;
+      display: inline-block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .user {
+      background: #00b4d8;
+      align-self: flex-end;
+      margin-left: auto;
+      color: #fff;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background: #2b2b2e;
+      align-self: flex-start;
+      color: #f1faee;
+      border-bottom-left-radius: 0;
+    }
+
+    .input-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 75%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #2b2b2e;
+      color: #fff;
+      outline: none;
+    }
+
+    button {
+      background: #00b4d8;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0077b6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      animation: blink 1.4s infinite both;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+
+    .link-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #00b4d8;
+      border-radius: 10px;
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .link-btn:hover {
+      background: #0077b6;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 BOT_StarkPotter</h1>
+  <div class="chat-container" id="chat"></div>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("userInput");
+
+    const BOT_NAME = "BOT_StarkPotter";
+
+    function addMessage(text, sender, html = false) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.innerHTML = html ? text : marked.parse(text);
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function showTyping() {
+      const typing = document.createElement("div");
+      typing.classList.add("typing");
+      typing.id = "typing";
+      typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function hideTyping() {
+      const typing = document.getElementById("typing");
+      if (typing) typing.remove();
+    }
+
+    function getBotReply(message) {
+      message = message.toLowerCase();
+
+      if (message.includes("hello") || message.includes("hi")) {
+        return "Hey there! I'm BOT_StarkPotter 🤖 — your Crystal PvP assistant. Wanna know some top servers?";
+      } 
+      if (message.includes("server")) {
+        return "Here are some **premium Crystal PvP servers** you should check out:\n- **PvPLand** – practice duels & ranked modes\n- **PvPHub** – smooth hits, great training\n- **Minemen Club** – top-tier Crystal players\n- **EU Practice** – low ping for Asia ⚔️";
+      } 
+      if (message.includes("starkpotter")) {
+        return "🧙‍♂️ **StarkPotter** is a Sri Lankan Crystal PvP player on the grind to **LT3 rank!** Known for insane crystal speed and smart movement 💥";
+      }
+      if (message.includes("learn") || message.includes("more")) {
+        return `You can learn more about StarkPotter and join the PvP community here:<br><a href="https://discord.gg/example" class="link-btn" target="_blank">💬 Join Discord</a><br><a href="https://youtube.com/@StarkPotter" class="link-btn" target="_blank">▶️ Watch YouTube</a>`;
+      }
+      if (message.includes("help")) {
+        return "I can tell you about **Crystal PvP servers**, **StarkPotter**, or share **tips** for improving your PvP. What do you wanna know?";
+      }
+      return "Hmm... not sure about that. Try asking about servers, StarkPotter, or PvP tips ⚡";
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      input.value = "";
+
+      showTyping();
+
+      await new Promise(r => setTimeout(r, 800));
+
+      hideTyping();
+      const reply = getBotReply(text);
+      addMessage(reply, "bot", true);
+    }
+  </script>
+</body>
+</html>
