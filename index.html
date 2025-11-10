@@ -1,176 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BOT_StarkPotter</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at center, #0a0a0a, #1a1a1d, #101020);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    h1 {
-      color: #00b4d8;
-      text-shadow: 0 0 20px #00b4d8;
-      margin-bottom: 15px;
-    }
-
-    .chat-container {
-      width: 90%;
-      max-width: 600px;
-      height: 70vh;
-      background: rgba(25,25,30,0.9);
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.6);
-      overflow-y: auto;
-    }
-
-    .message {
-      margin: 10px 0;
-      padding: 10px 14px;
-      border-radius: 15px;
-      max-width: 80%;
-      line-height: 1.4;
-      display: inline-block;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .user {
-      background: #00b4d8;
-      align-self: flex-end;
-      margin-left: auto;
-      color: #fff;
-      border-bottom-right-radius: 0;
-    }
-
-    .bot {
-      background: #2b2b2e;
-      align-self: flex-start;
-      color: #f1faee;
-      border-bottom-left-radius: 0;
-    }
-
-    .input-area {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    input {
-      width: 75%;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background: #2b2b2e;
-      color: #fff;
-      outline: none;
-    }
-
-    button {
-      background: #00b4d8;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      margin-left: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #0077b6;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BOT_StarkPotter</title>
+<style>
+  body{font-family:Poppins, sans-serif;background:#111;color:#fff;
+       display:flex;flex-direction:column;align-items:center;height:100vh;margin:0;}
+  h1{color:#00b4d8;text-shadow:0 0 10px #00b4d8;}
+  #chat{width:90%;max-width:600px;height:70vh;overflow-y:auto;
+        background:#1b1b1d;border-radius:15px;padding:20px;}
+  .msg{margin:8px 0;padding:10px 15px;border-radius:12px;max-width:80%;}
+  .user{background:#00b4d8;color:#fff;margin-left:auto;}
+  .bot{background:#2b2b2e;color:#f1faee;}
+  #inputArea{margin-top:10px;display:flex;width:90%;max-width:600px;}
+  input{flex:1;padding:10px;border:none;border-radius:10px;background:#2b2b2e;color:#fff;}
+  button{background:#00b4d8;color:#fff;border:none;padding:10px 15px;margin-left:8px;
+         border-radius:10px;cursor:pointer;}
+  .typing{color:#aaa;font-style:italic;margin:5px;}
+</style>
 </head>
 <body>
-  <h1>🤖 BOT_StarkPotter</h1>
-  <div class="chat-container" id="chat"></div>
-  <div class="input-area">
-    <input type="text" id="userInput" placeholder="Ask me anything..." />
-    <button onclick="sendMessage()">Send</button>
-  </div>
+<h1>🤖 BOT_StarkPotter</h1>
+<div id="chat"></div>
+<div id="inputArea">
+  <input id="msg" placeholder="Ask me anything..." autocomplete="off">
+  <button onclick="sendMsg()">Send</button>
+</div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("userInput");
+<script>
+const chat=document.getElementById("chat");
+const input=document.getElementById("msg");
+let history=[];
 
-    function addMessage(text, sender) {
-      const msg = document.createElement("div");
-      msg.classList.add("message", sender);
-      msg.innerHTML = text;
-      chat.appendChild(msg);
-      chat.scrollTop = chat.scrollHeight;
-    }
+function append(text,cls){const d=document.createElement("div");
+ d.className="msg "+cls;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
 
-    async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage(text, "user");
-      input.value = "";
-
-      // Simulated AI delay
-      addMessage("...", "bot");
-      await new Promise(r => setTimeout(r, 700));
-      chat.lastChild.remove();
-
-      const reply = generateReply(text);
-      addMessage(reply, "bot");
-    }
-
-    function generateReply(inputText) {
-      const text = inputText.toLowerCase();
-      const randomFacts = [
-        "By the way, StarkPotter is a legend in the Crystal PvP scene ⚡",
-        "Don’t forget, StarkPotter is always grinding to improve 🔥",
-        "You know StarkPotter? That guy’s a serious PvP pro 💎",
-        "Fun fact: StarkPotter’s reactions are faster than most players!",
-        "Just saying — StarkPotter inspires a lot of new PvPers 😎"
-      ];
-      const randomMention = randomFacts[Math.floor(Math.random() * randomFacts.length)];
-
-      if (text.includes("hello") || text.includes("hi")) {
-        return "Hey there! I’m BOT_StarkPotter 🤖. Ask me anything — games, facts, tech, or life tips! " + randomMention;
-      }
-
-      if (text.includes("who") && text.includes("starkpotter")) {
-        return "StarkPotter is a Sri Lankan Crystal PvP player known for speed, precision, and clean fights. LT3 rank grind, baby! 💥";
-      }
-
-      if (text.includes("pvp") || text.includes("minecraft")) {
-        return "Crystal PvP is a high-skill mode where you use End Crystals strategically. StarkPotter is one of the players who mastered it 💎";
-      }
-
-      if (text.includes("how are you")) {
-        return "I’m running at full power 💪 Just like StarkPotter in PvP mode!";
-      }
-
-      if (text.includes("who made you")) {
-        return "I was built to represent StarkPotter’s knowledge and personality ⚡";
-      }
-
-      if (text.includes("bye")) {
-        return "Later bro 👋 And remember — StarkPotter never gives up!";
-      }
-
-      // Default smart answer
-      return "That’s an interesting question! I may not know everything, but I’ll give it my best. And hey, StarkPotter would love this topic too 😄";
-    }
-  </script>
+async function sendMsg(){
+ const text=input.value.trim(); if(!text)return;
+ append(text,"user"); history.push({role:"user",content:text}); input.value="";
+ const typing=document.createElement("div");typing.className="typing";typing.textContent="BOT_StarkPotter is typing...";chat.appendChild(typing);
+ try{
+   const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({message:text})});
+   const data=await res.json();
+   typing.remove();
+   append(data.reply,"bot");
+   history.push({role:"assistant",content:data.reply});
+ }catch(e){typing.remove();append("Error: "+e.message,"bot");}
+}
+</script>
 </body>
 </html>
