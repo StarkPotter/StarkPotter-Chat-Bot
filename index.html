@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BOT_StarkPotter | Crystal PvP Chatbot</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>BOT_StarkPotter</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+      background: radial-gradient(circle at center, #0a0a0a, #1a1a1d, #101020);
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -20,19 +19,20 @@
     }
 
     h1 {
-      margin-bottom: 10px;
-      text-shadow: 0 0 15px #00b4d8;
+      color: #00b4d8;
+      text-shadow: 0 0 20px #00b4d8;
+      margin-bottom: 15px;
     }
 
     .chat-container {
       width: 90%;
       max-width: 600px;
-      background: rgba(20, 20, 25, 0.9);
+      height: 70vh;
+      background: rgba(25,25,30,0.9);
       border-radius: 15px;
       padding: 20px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      box-shadow: 0 0 30px rgba(0,0,0,0.6);
       overflow-y: auto;
-      height: 70vh;
     }
 
     .message {
@@ -96,57 +96,13 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    .typing {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 5px;
-      margin-left: 10px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: #fff;
-      border-radius: 50%;
-      animation: blink 1.4s infinite both;
-    }
-
-    .dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes blink {
-      0%, 80%, 100% { opacity: 0; }
-      40% { opacity: 1; }
-    }
-
-    .link-btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 15px;
-      background: #00b4d8;
-      border-radius: 10px;
-      color: #fff;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .link-btn:hover {
-      background: #0077b6;
-    }
   </style>
 </head>
 <body>
   <h1>🤖 BOT_StarkPotter</h1>
   <div class="chat-container" id="chat"></div>
   <div class="input-area">
-    <input type="text" id="userInput" placeholder="Type your message..." />
+    <input type="text" id="userInput" placeholder="Ask me anything..." />
     <button onclick="sendMessage()">Send</button>
   </div>
 
@@ -154,49 +110,12 @@
     const chat = document.getElementById("chat");
     const input = document.getElementById("userInput");
 
-    const BOT_NAME = "BOT_StarkPotter";
-
-    function addMessage(text, sender, html = false) {
+    function addMessage(text, sender) {
       const msg = document.createElement("div");
       msg.classList.add("message", sender);
-      msg.innerHTML = html ? text : marked.parse(text);
+      msg.innerHTML = text;
       chat.appendChild(msg);
       chat.scrollTop = chat.scrollHeight;
-    }
-
-    function showTyping() {
-      const typing = document.createElement("div");
-      typing.classList.add("typing");
-      typing.id = "typing";
-      typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-      chat.appendChild(typing);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function hideTyping() {
-      const typing = document.getElementById("typing");
-      if (typing) typing.remove();
-    }
-
-    function getBotReply(message) {
-      message = message.toLowerCase();
-
-      if (message.includes("hello") || message.includes("hi")) {
-        return "Hey there! I'm BOT_StarkPotter 🤖 — your Crystal PvP assistant. Wanna know some top servers?";
-      } 
-      if (message.includes("server")) {
-        return "Here are some **premium Crystal PvP servers** you should check out:\n- **PvPLand** – practice duels & ranked modes\n- **PvPHub** – smooth hits, great training\n- **Minemen Club** – top-tier Crystal players\n- **EU Practice** – low ping for Asia ⚔️";
-      } 
-      if (message.includes("starkpotter")) {
-        return "🧙‍♂️ **StarkPotter** is a Sri Lankan Crystal PvP player on the grind to **LT3 rank!** Known for insane crystal speed and smart movement 💥";
-      }
-      if (message.includes("learn") || message.includes("more")) {
-        return `You can learn more about StarkPotter and join the PvP community here:<br><a href="https://discord.gg/example" class="link-btn" target="_blank">💬 Join Discord</a><br><a href="https://youtube.com/@StarkPotter" class="link-btn" target="_blank">▶️ Watch YouTube</a>`;
-      }
-      if (message.includes("help")) {
-        return "I can tell you about **Crystal PvP servers**, **StarkPotter**, or share **tips** for improving your PvP. What do you wanna know?";
-      }
-      return "Hmm... not sure about that. Try asking about servers, StarkPotter, or PvP tips ⚡";
     }
 
     async function sendMessage() {
@@ -205,13 +124,52 @@
       addMessage(text, "user");
       input.value = "";
 
-      showTyping();
+      // Simulated AI delay
+      addMessage("...", "bot");
+      await new Promise(r => setTimeout(r, 700));
+      chat.lastChild.remove();
 
-      await new Promise(r => setTimeout(r, 800));
+      const reply = generateReply(text);
+      addMessage(reply, "bot");
+    }
 
-      hideTyping();
-      const reply = getBotReply(text);
-      addMessage(reply, "bot", true);
+    function generateReply(inputText) {
+      const text = inputText.toLowerCase();
+      const randomFacts = [
+        "By the way, StarkPotter is a legend in the Crystal PvP scene ⚡",
+        "Don’t forget, StarkPotter is always grinding to improve 🔥",
+        "You know StarkPotter? That guy’s a serious PvP pro 💎",
+        "Fun fact: StarkPotter’s reactions are faster than most players!",
+        "Just saying — StarkPotter inspires a lot of new PvPers 😎"
+      ];
+      const randomMention = randomFacts[Math.floor(Math.random() * randomFacts.length)];
+
+      if (text.includes("hello") || text.includes("hi")) {
+        return "Hey there! I’m BOT_StarkPotter 🤖. Ask me anything — games, facts, tech, or life tips! " + randomMention;
+      }
+
+      if (text.includes("who") && text.includes("starkpotter")) {
+        return "StarkPotter is a Sri Lankan Crystal PvP player known for speed, precision, and clean fights. LT3 rank grind, baby! 💥";
+      }
+
+      if (text.includes("pvp") || text.includes("minecraft")) {
+        return "Crystal PvP is a high-skill mode where you use End Crystals strategically. StarkPotter is one of the players who mastered it 💎";
+      }
+
+      if (text.includes("how are you")) {
+        return "I’m running at full power 💪 Just like StarkPotter in PvP mode!";
+      }
+
+      if (text.includes("who made you")) {
+        return "I was built to represent StarkPotter’s knowledge and personality ⚡";
+      }
+
+      if (text.includes("bye")) {
+        return "Later bro 👋 And remember — StarkPotter never gives up!";
+      }
+
+      // Default smart answer
+      return "That’s an interesting question! I may not know everything, but I’ll give it my best. And hey, StarkPotter would love this topic too 😄";
     }
   </script>
 </body>
