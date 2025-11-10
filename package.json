@@ -1,0 +1,9 @@
+{
+  "name": "bot_starkpotter",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.19.0",
+    "dotenv": "^16.4.0",
+    "node-fetch": "^3.3.2"
+  }
+}
